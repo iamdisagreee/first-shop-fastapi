@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_shop
+    volumes:
+      - ./docker_info/postgresql_data:/var/lib/postgresql/data
+    environment:
+       POSTGRES_DB: ShopDB
+       POSTGRES_USER: vladimir
+       POSTGRES_PASSWORD: amazingroom123!
+    ports:
+      - 5432:5432
+    restart: always
