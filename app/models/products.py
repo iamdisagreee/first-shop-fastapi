@@ -18,6 +18,7 @@ class Product(Base):
     image_url: Mapped[str] = mapped_column(String)
     stock: Mapped[int] = mapped_column(Integer)
     rating: Mapped[float] = mapped_column(Float)
+    supplier_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'), nullable=True) 
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey('categories.id'))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     category: Mapped["category.Category"] = relationship('Category', back_populates='products')

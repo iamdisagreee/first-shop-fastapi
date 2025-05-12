@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+from app.config import load_config
 
 from alembic import context
 
@@ -23,12 +24,19 @@ if config.config_file_name is not None:
 from app.backend.db import Base
 from app.models.products import Product
 from app.models.category import Category
+from app.models.user import User
 target_metadata = Base.metadata
 
+config_site = load_config()
+config.set_main_option(
+    "sqlalchemy.url",
+    config_site.site.postgres
+)
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
 
 
 def run_migrations_offline() -> None:

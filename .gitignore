@@ -1,2 +1,6 @@
 .env
+.mypy_cache/
+.idea
+venv/
+__pycache__
 docker_info/
