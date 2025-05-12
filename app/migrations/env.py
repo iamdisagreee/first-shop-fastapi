@@ -25,6 +25,7 @@ from app.backend.db import Base
 from app.models.products import Product
 from app.models.category import Category
 from app.models.user import User
+from app.models.review import Review
 target_metadata = Base.metadata
 
 config_site = load_config()
