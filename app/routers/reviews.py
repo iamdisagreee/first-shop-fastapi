@@ -2,8 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
-from requests import session
-from sqlalchemy import select, delete
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -45,7 +44,7 @@ async def products_reviews(session: Annotated[AsyncSession, Depends(get_db)],
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail='Product not found')
     reviews = (
-        await session.execute(
+        await session.scalars(
         select(Review)
         .where(Review.product_id == product.id)
         )
@@ -101,7 +100,9 @@ async def delete_reviews(session: Annotated[AsyncSession, Depends(get_db)],
                          get_user: Annotated[dict, Depends(get_current_user)],
                          review_id: int):
     if get_user.get('is_admin'):
-        await session.execute(delete(Review).where(Review.id == review_id))
+        await session.execute(update(Review)
+                              .where(Review.id == review_id)
+                              .values(is_active=False))
         await session.commit()
         return {'status_code': status.HTTP_200_OK,
             'transaction': 'Review delete is successful'}

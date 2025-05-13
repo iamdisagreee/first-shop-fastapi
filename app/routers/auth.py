@@ -2,7 +2,7 @@ from datetime import timedelta, datetime, timezone
 
 import jwt
 from fastapi import APIRouter, Depends, status, HTTPException
-from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy import select, insert
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -57,7 +57,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         is_supplier: bool | None = payload.get('is_supplier')
         is_customer: bool | None = payload.get('is_customer')
         expire: int | None = payload.get('exp')
-
         if username is None or user_id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -113,7 +112,7 @@ async def login(session: Annotated[AsyncSession, Depends(get_db)],
 
 @router.get('/read_current_user')
 async def read_current_user(user: dict = Depends(get_current_user)):
-    return user
+    return {'User': user}
 
 
 # Пользователь уже создан?
